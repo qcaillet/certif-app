@@ -1,6 +1,7 @@
 import { lazy } from 'react';
 import { createBrowserRouter, redirect } from 'react-router-dom';
 import App from './App';
+import { getRecipe } from './apis/recipes';
 
 const HomePage = lazy(() => import('./pages/HomePage/HomePage'));
 const Admin = lazy(() => import('./pages/Admin/Admin'));

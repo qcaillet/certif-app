@@ -2,15 +2,20 @@ import styles from './RecipeForm.module.scss';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useContext } from 'react';
-import { ApiContext } from '../../../../../../context/ApiContext';
+import { createRecipe, updateRecipe } from 'apis/recipes';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
+import { selectActiveRecipe } from 'state';
 
 function AdminRecipeForm() {
-  const BASE_URL = useContext(ApiContext);
+  const { recipeId } = useParams();
+  const recipe = useRecoilValue(selectActiveRecipe(recipeId));
+
+  const navigate = useNavigate();
 
   const defaultValues = {
-    title: '',
-    image: '',
+    title: recipe ? recipe.title : '',
+    image: recipe ? recipe.image : '',
   };
 
   const recipeSchema = yup.object({
@@ -40,20 +45,15 @@ function AdminRecipeForm() {
   async function submit(values) {
     try {
       clearErrors();
-      const response = await fetch(BASE_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(values),
-      });
-      if (response.ok) {
-        reset(defaultValues);
-      } else {
-        setError('generic', {
-          type: 'generic',
-          message: 'Il y a eu une erreur',
+      if (recipe) {
+        await updateRecipe({
+          ...values,
+          _id: recipe._id,
         });
+        navigate('/admin/recipes/list');
+      } else {
+        await createRecipe(values);
+        reset(defaultValues);
       }
     } catch (e) {
       setError('generic', { type: 'generic', message: 'Il y a eu une erreur' });
