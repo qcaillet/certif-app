@@ -2,12 +2,13 @@ import styles from './RecipeForm.module.scss';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { createRecipe, updateRecipe } from 'apis/recipes';
+import { createRecipe, updateRecipe } from '../../../../../../apis/recipes';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { selectActiveRecipe } from 'state';
+import { RecipeI } from 'interfaces';
 
-function AdminRecipeForm() {
+function AdminRecipesForm() {
   const { recipeId } = useParams();
   const recipe = useRecoilValue(selectActiveRecipe(recipeId));
 
@@ -16,6 +17,7 @@ function AdminRecipeForm() {
   const defaultValues = {
     title: recipe ? recipe.title : '',
     image: recipe ? recipe.image : '',
+    generic: '',
   };
 
   const recipeSchema = yup.object({
@@ -42,7 +44,7 @@ function AdminRecipeForm() {
     resolver: yupResolver(recipeSchema),
   });
 
-  async function submit(values) {
+  async function submit(values: Partial<RecipeI>) {
     try {
       clearErrors();
       if (recipe) {
@@ -56,7 +58,7 @@ function AdminRecipeForm() {
         reset(defaultValues);
       }
     } catch (e) {
-      setError('generic', { type: 'generic', message: 'Il y a eu une erreur' });
+      console.log('error');
     }
   }
 
@@ -74,9 +76,9 @@ function AdminRecipeForm() {
       <div className="d-flex flex-column mb-20">
         <label>Image pour la recette</label>
         <input {...register('image')} type="text" />
-        {errors.image && <p className="form-error">{errors.image.message}</p>}
+        {/* {errors.image && <p className="form-error">{errors.image.message}</p>} */}
       </div>
-      {errors.generic && <p className="form-error">{errors.generic.message}</p>}
+      {/* {errors.generic && <p className="form-error">{errors.generic.message}</p>} */}
       <div>
         <button disabled={isSubmitting} className="btn btn-primary">
           Sauvegarder
@@ -86,4 +88,4 @@ function AdminRecipeForm() {
   );
 }
 
-export default AdminRecipeForm;
+export default AdminRecipesForm;

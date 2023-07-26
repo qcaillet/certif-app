@@ -1,26 +1,27 @@
 import { lazy } from 'react';
 import { createBrowserRouter, redirect } from 'react-router-dom';
 import App from './App';
-import { getRecipe } from './apis/recipes';
 
 const HomePage = lazy(() => import('./pages/HomePage/HomePage'));
 const Admin = lazy(() => import('./pages/Admin/Admin'));
-const AdminRecipes = lazy(() =>
-  import('./pages/Admin/pages/AdminRecipes/AdminRecipes')
+const AdminRecipes = lazy(
+  () => import('./pages/Admin/pages/AdminRecipes/AdminRecipes')
 );
-const AdminUsers = lazy(() =>
-  import('./pages/Admin/pages/AdminUsers/AdminUsers')
+const AdminUsers = lazy(
+  () => import('./pages/Admin/pages/AdminUsers/AdminUsers')
 );
 
-const AdminRecipesList = lazy(() =>
-  import(
-    './pages/Admin/pages/AdminRecipes/pages/AdminRecipesList/AdminRecipesList'
-  )
+const AdminRecipesList = lazy(
+  () =>
+    import(
+      './pages/Admin/pages/AdminRecipes/pages/AdminRecipesList/AdminRecipesList'
+    )
 );
-const AdminRecipesForm = lazy(() =>
-  import(
-    './pages/Admin/pages/AdminRecipes/pages/AdminRecipeForm/AdminRecipeForm'
-  )
+const AdminRecipesForm = lazy(
+  () =>
+    import(
+      './pages/Admin/pages/AdminRecipes/pages/AdminRecipeForm/AdminRecipeForm'
+    )
 );
 
 export const router = createBrowserRouter([

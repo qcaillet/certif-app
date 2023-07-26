@@ -15,6 +15,8 @@ import {
   wishlistDisplayState,
 } from 'state';
 import Wishlist from './components/Wishlist/Wishlist';
+import { RecipeI } from 'interfaces';
+import { ObjectId } from 'types';
 
 export default function HomePage() {
   const [filter, setFilter] = useState('');
@@ -24,14 +26,14 @@ export default function HomePage() {
   const setRecipes = useSetRecoilState(recipesState);
   const showWishList = useRecoilValue(wishlistDisplayState);
 
-  async function updateRecipe(updatedRecipe) {
+  async function updateRecipe(updatedRecipe: RecipeI) {
     const savedRecipe = await updateR(updatedRecipe);
     setRecipes(
       recipes.map((r) => (r._id === savedRecipe._id ? savedRecipe : r))
     );
   }
 
-  async function deleteRecipe(_id) {
+  async function deleteRecipe(_id: ObjectId) {
     await deleteR(_id);
     setRecipes(recipes.filter((r) => r._id !== _id));
   }

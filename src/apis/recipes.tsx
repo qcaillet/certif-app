@@ -1,6 +1,11 @@
+import { RecipeI } from 'interfaces';
+import { ObjectId } from 'types';
+
 const RECIPE_API = 'https://restapi.fr/api/recipecaillet';
 
-export async function getRecipes(queryParam) {
+export async function getRecipes(
+  queryParam?: URLSearchParams
+): Promise<RecipeI[]> {
   const response = await fetch(
     `${RECIPE_API}${queryParam ? `?${queryParam}` : ''}`
   );
@@ -12,7 +17,7 @@ export async function getRecipes(queryParam) {
   }
 }
 
-export async function getRecipe(_id) {
+export async function getRecipe(_id: ObjectId): Promise<RecipeI> {
   const response = await fetch(`${RECIPE_API}/${_id}`);
   if (response.ok) {
     return response.json();
@@ -21,7 +26,7 @@ export async function getRecipe(_id) {
   }
 }
 
-export async function deleteRecipe(_id) {
+export async function deleteRecipe(_id: ObjectId): Promise<ObjectId> {
   const response = await fetch(`${RECIPE_API}/${_id}`, {
     method: 'DELETE',
   });
@@ -32,7 +37,9 @@ export async function deleteRecipe(_id) {
   }
 }
 
-export async function updateRecipe(updatedRecipe) {
+export async function updateRecipe(
+  updatedRecipe: Partial<RecipeI>
+): Promise<RecipeI> {
   const { _id, ...restRecipe } = updatedRecipe;
   const response = await fetch(`${RECIPE_API}/${_id}`, {
     method: 'PATCH',
@@ -48,7 +55,9 @@ export async function updateRecipe(updatedRecipe) {
   }
 }
 
-export async function createRecipe(newRecipe) {
+export async function createRecipe(
+  newRecipe: Partial<RecipeI>
+): Promise<RecipeI> {
   const response = await fetch(RECIPE_API, {
     method: 'POST',
     headers: {

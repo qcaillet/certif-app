@@ -3,14 +3,14 @@ import { useFetchRecipes } from 'hooks/useFetchRecipes';
 import styles from './AdminRecipesList.module.scss';
 import { deleteRecipe as deleteR } from 'apis/recipes';
 import { NavLink } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
 import { useRecoilState } from 'recoil';
 import { recipesState } from 'state';
+import { ObjectId } from 'types';
 function AdminRecipesList() {
   useFetchRecipes();
   const [recipes, setRecipes] = useRecoilState(recipesState);
 
-  async function deleteRecipe(_id) {
+  async function deleteRecipe(_id: ObjectId) {
     await deleteR(_id);
     setRecipes(recipes.filter((r) => r._id !== _id));
   }

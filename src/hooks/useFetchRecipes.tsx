@@ -1,23 +1,23 @@
 import { useEffect, useState } from 'react';
-import { getRecipes } from '../apis/recipes';
 import { useSetRecoilState } from 'recoil';
 import { recipesState } from 'state';
+import { getRecipes } from '../apis/recipes';
 
-export function useFetchRecipes(page) {
+export function useFetchRecipes(page?: number): [boolean, string] {
   const setRecipes = useSetRecoilState(recipesState);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState([]);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     let cancel = false;
-    async function fetchRecipes() {
+    async function fetchData() {
       try {
         setIsLoading(true);
         const queryParam = new URLSearchParams();
-
         if (page) {
-          queryParam.append('limit', 18);
-          queryParam.append('skip', (page - 1) * 18);
+          queryParam.append('limit', '18');
+          queryParam.append('skip', `${(page - 1) * 18}`);
+          queryParam.append('sort', 'createdAt:-1');
         }
         const fetchedRecipes = await getRecipes(queryParam);
         if (!cancel) {
@@ -35,8 +35,10 @@ export function useFetchRecipes(page) {
         }
       }
     }
-    fetchRecipes();
-    return () => (cancel = true);
+    fetchData();
+    return () => {
+      cancel = true;
+    };
   }, [page, setRecipes]);
 
   return [isLoading, error];

@@ -1,6 +1,7 @@
-const { atom } = require('recoil');
+import { RecipeI } from 'interfaces';
+import { atom } from 'recoil';
 
-export const recipesState = atom({
+export const recipesState = atom<RecipeI[]>({
   key: 'recipesState',
   default: [],
 });
